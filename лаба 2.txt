@@ -1,0 +1,107 @@
+Вариант 1
+1) Выделить память под 3 двумерных массива N*N. Тип double, N
+считывается с консоли. Пусть массивы называются A, B, C.
+2) Заполните массивы A и B случайными числами от 0 до 10
+(включительно).
+3) Создайте функцию, которая будет выполнять сложение массивов A и B в
+C (обычное сложение матриц).
+Сама функция имеет прототип void func(double**, double**, double**)
+4) Выведите все массивы в консоль.
+
+
+
+#include <iostream>
+#include <cstdlib>
+#include <cmath>
+#include <ctime>
+
+using namespace std;
+
+void func(double** A, double** B, double** C, int N){
+for(int i = 0; i < N; i++){
+for(int j = 0; j < N; j++){
+C[i][j]=A[i][j] + B[i][j];
+}
+}
+}
+
+
+int main() {
+srand(time(NULL));
+double **A, **B, **C; // ** - объявление указателя
+int N;
+cout << "Введите размер массива" << endl;
+cin >> N;
+
+
+A = new double *[N]; //объявление указателя
+B = new double *[N];
+C = new double *[N];
+
+for (int i = 0; i <N; i++){
+A[i] = new double[N]; //выделение памяти под массив- создание динамического массива
+B[i] = new double[N]; //выделение памяти
+C[i] = new double[N]; //выделение памяти
+for (int j = 0; j <N; j++){
+A[i][j] = (double)rand() / RAND_MAX * 10;
+B[i][j] = (double)rand() / RAND_MAX * 10;
+}
+}
+
+func(A,B,C,N);
+
+cout << "Массив A" << endl; //вывод массива А
+for (int i = 0; i < N; i++)
+{
+for (int j = 0; j < N; j++)
+{
+    cout << fixed; //фиксирует количетсво цифр после запятой
+    cout.precision(3); //количетсво знаков после запятой
+cout << A[i][j] << "\t";
+}
+cout << endl;
+}
+cout << endl;
+
+for (int i = 0; i < N; i++) { //Освобождение памяти
+delete[] A[i];
+}
+delete[] A;
+
+cout << "Массив B" << endl; //вывод массива B
+for (int i = 0; i < N; i++)
+{
+for (int j = 0; j < N; j++)
+{
+    cout << fixed;
+    cout.precision(3);
+cout << B[i][j] << "\t";
+}
+cout << endl;
+}
+cout << endl;
+
+for (int i = 0; i < N; i++) { //Освобождение памяти
+delete[] B[i];
+}
+delete[] B;
+
+cout << "Массив C" <<  endl; //вывод массива C
+for (int i = 0; i < N; i++)
+{
+for (int j = 0; j < N; j++)
+{
+    cout << fixed;
+    cout.precision(3);
+cout << C[i][j] << "\t";
+}
+cout << endl;
+}
+cout << endl;
+
+for (int i = 0; i < N; i++) { //Освобождение памяти
+delete[] C[i];
+}
+delete[] C;
+
+}

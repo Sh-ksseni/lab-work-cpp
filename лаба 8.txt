@@ -1,0 +1,94 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    string val;
+    Node* next;
+
+
+    Node(string _val) : val(_val), next(nullptr) {}
+};
+
+struct list {
+    Node* first;
+    Node* last;
+
+    list() : first(nullptr), last(nullptr) {}
+
+    bool is_empty() {
+        return first == nullptr;
+    }
+
+    void push_back_last(string _val) {
+        Node* p = new Node(_val);
+        if (is_empty()) {
+            first = p;
+            last = p;
+            return;
+        }
+        last->next = p;
+        last = p;
+        
+    }
+    
+    void push_back_first(string _val) {
+        Node* p = new Node(_val);
+        if (is_empty()) {
+            first = p;
+            last = p;
+            return;
+        }
+        
+        p -> next = first;
+        first = p;
+
+        
+    }
+
+    void print() {
+        if (is_empty()) return;
+        Node* p = first;
+        while (p) {
+            cout << p->val << " ";
+            p = p->next;
+        }
+        cout << endl;
+    }
+
+    void remove_first() {
+        if (is_empty()) return;
+        Node* p = first;
+        first = p->next;
+        delete p;
+    }
+
+    
+
+    Node* operator[] (const int index) {
+        if (is_empty()) return nullptr;
+        Node* p = first;
+        for (int i = 0; i < index; i++) {
+            p = p->next;
+            if (!p) return nullptr;
+        }
+        return p;
+    }
+};
+
+int main()
+{
+    list l;
+    
+    l.push_back_first("5");
+    l.push_back_last("3");
+    l.push_back_last("123");
+    l.push_back_last("8");
+    l.push_back_first("5");
+    l.print();
+    l.remove_first();
+    l.print();
+    cout << l[0]->val << endl;
+    return 0;
+}
+
+

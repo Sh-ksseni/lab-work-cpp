@@ -1,0 +1,59 @@
+Вариант 1
+1) Создайте классы Треугольник и Квадрат. Пусть каждый из них хранит
+необходимое количество переменных для описания всех сторон.
+2) Добавьте в классы методы расчета площади и периметра (они должны
+возвращать значения).
+3) Создайте несколько треугольников и квадратов. Выведите всю
+доступную информацию о них.
+
+
+#include <stdio.h>
+#include <iostream>
+using namespace std;
+
+class Triangle {
+public:
+    double Perimeter;
+    double Square;
+
+    Triangle(double side1, double side2, double side3, double height_on_side3) {
+        Perimeter = side1 + side2 + side3;
+        Square = height_on_side3*side3;
+    }
+
+    void PerimeterTriangle() {
+        std::cout << "Периметр треугольника =" << Perimeter << std::endl;
+    }
+    void SquareTriangle() {
+        cout << "Площадь треугольника = " << Square << endl;
+    }
+};
+
+class Box {
+public:
+    double Perimeter;
+    double Square;
+    
+    Box (double side1) {
+        Perimeter = side1;
+        Square = 4*side1;
+    }
+
+   void PerimeterBox() {
+        cout << "Периметр квадрата =" << Perimeter << endl;
+    }
+    void SquareBox() {
+        cout << "Площадь квадрта = " << Square << endl;
+    }
+};
+
+int main()
+{
+    Box box1 = Box(10.0);
+    box1.PerimeterBox();
+    box1.SquareBox();
+    
+    Triangle triangle1 = Triangle(5.0, 5.0, 7.0, 3.0);
+    triangle1.PerimeterTriangle();
+    triangle1.SquareTriangle();
+}

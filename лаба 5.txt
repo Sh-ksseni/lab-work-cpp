@@ -1,0 +1,151 @@
+/*Лабораторная 5 Вариант 1
+1. Вам необходимо создать родительский класс Фигура со свойствами: количество сторон, массив длин сторон, указатели на функции
+расчета площади и периметра. Так же у него должны быть методы расчета площади и периметра фигуры (они должны возвращать
+значения, и рассчитывать значения используя указатели на функции).
+2. Необходимо реализовать следующие классы, отнаследованные от Фигуры: Круг и Многоугольник.
+ёУ этих дочерних классов дополнительно должен быть метод, который выводит в консоль информацию о том, какая это фигура.
+3. Необходимо реализовать класс Тетрадь, в которой будут генерироваться N случайных фигур с случайными свойствами.
+N задается пользователем в консоли.
+4. После генерации всех фигур необходимо вывести информацию о них и суммы площадей и периметров.
+*/
+
+#include <stdio.h>
+#include <iostream>
+#include <math.h>
+#include <time.h>
+using namespace std;
+
+class Figure{
+    protected:
+        double* side_lengths;
+        int n;
+         
+        
+        
+    public:
+        Figure(int n, double *array) {
+            side_lengths = new double[n];
+                };
+                
+                double perimeterFigure(int number_sides, double *array){
+                    double sum_parties = 0;
+                    for(int i = 0; i < number_sides; i++) {
+                    side_lengths[i] = array[i];
+                    sum_parties += side_lengths[i];
+                    }
+                cout << "\nПериметр: " << sum_parties << endl;
+                return sum_parties;
+                }
+                
+                double squareCircle(int number_sides, double *array){
+                    double square_circle = 0;
+                    for(int i = 0; i < number_sides; i++) {
+                    side_lengths[i] = array[i];
+                    square_circle = side_lengths[i] * side_lengths[i] / 4 / 3.14;
+                    }
+                cout << "\nПлощадь: " << square_circle << endl;
+                return square_circle;
+                }
+                
+                double squarePolygon(int number_sides, double *array){
+                    double square_polygon = 0;
+                    for(int i = 0; i < number_sides; i++) {
+                    side_lengths[i] = array[i];
+                    square_polygon = number_sides * side_lengths[i] * side_lengths[i] / 4 / tan(3.14/number_sides);
+                    }
+                cout << "\nПлощадь: " << square_polygon << endl;
+                return square_polygon;
+                }
+            
+            virtual ~Figure() {
+            delete []side_lengths;
+        }
+};
+
+class Circle: public Figure{
+    public:
+        Circle(int number_sides, double *array):
+        Figure(number_sides, side_lengths) {
+        }
+    
+    void informationOutput(){
+        cout << "Тип фигуры: круг" << endl;
+        
+    }
+    
+    };
+    
+class Polygon: public Figure{
+    public:
+        Polygon(int number_sides, double *array):
+        Figure(number_sides, side_lengths){
+        }
+    
+    void informationOutput(){
+        cout << "Тип фигуры: многоугольник " << endl;
+        
+    }
+};
+
+
+class Copybook{
+   
+    private:
+        int n;
+        int number_sides;
+        double* side_lengths;
+        int a = 1;
+        int b = 7;
+        double c = 0.0;
+        double d = 15.0;
+    public:
+        Copybook(int n){
+            srand(time(NULL));
+            side_lengths = new double[number_sides];
+            for (int i = 0; i < n; i++) {
+                double _side_lengths = c + (d - c) / RAND_MAX * rand();
+                number_sides = a + rand() % (b - a + 1);
+                for (int j = 0; j < number_sides; j++){
+                    side_lengths[j] = _side_lengths;
+                }
+                cout << "\n№" << i+1 << ")";
+                Figure figure = Figure(number_sides, side_lengths);
+                Circle circle = Circle(number_sides, side_lengths);
+                Polygon polygon = Polygon(number_sides, side_lengths);
+                if (number_sides == 1){
+                    circle.informationOutput();
+                    cout << "Количество сторон: " << number_sides << endl;
+                    cout << fixed;
+                    cout.precision(3);
+                    cout << "\nДлина стороны: " << side_lengths[i] << endl;
+                    figure.perimeterFigure(number_sides, side_lengths); 
+                    figure.squareCircle(number_sides, side_lengths);
+                }
+                if (number_sides == 2){
+                    cout << "\nТакой фигуры не существует" << endl;
+                }
+                if (number_sides > 2){
+                    polygon.informationOutput();
+                    cout << "Количество сторон: " << number_sides << endl;
+                    cout << fixed;
+                    cout.precision(3);
+                    cout << "\nДлина стороны: " << side_lengths[i] << endl;
+                    figure.perimeterFigure(number_sides, side_lengths); 
+                    figure.squarePolygon(number_sides, side_lengths);
+            }
+        }
+        
+            for (int i = 0; i < n; i++) {
+            delete []side_lengths;
+        }
+    }
+    
+};
+
+int main(){
+    int n;
+    cout << "Введите количество фигур" << endl;
+    cin >> n;
+    Copybook copybook = Copybook(n);
+    return 0;
+}

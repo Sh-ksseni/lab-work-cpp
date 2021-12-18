@@ -1,0 +1,237 @@
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+class Bullet
+{
+protected:
+	double _caliber;
+	int	_speed;
+	double _energy;
+	string _name;
+	double _massa = 0.006;
+public:
+
+	Bullet(double caliber, int speed, string name)
+	{
+		_caliber = caliber;
+		_speed = speed;
+		_energy = _massa * _speed * _speed / 2;
+		_name = name;
+	}
+
+	~Bullet()
+	{
+	}
+
+	string getName()
+	{
+		return _name;
+	}
+
+	int getSpeed()
+	{
+		return _speed;
+	}
+};
+
+class CommonBullet : public Bullet
+{
+public:
+	CommonBullet(double caliber, int speed, string name) : Bullet(caliber, speed, name)
+	{
+	}
+
+	~CommonBullet()
+	{
+	}
+};
+
+class PiercingBullet : public Bullet
+{
+public:
+	PiercingBullet(double caliber, int speed, string name) : Bullet(caliber, speed, name)
+	{
+	}
+
+	~PiercingBullet()
+	{
+	}
+};
+
+class FieryBullet : public Bullet
+{
+public:
+	FieryBullet(double caliber, int speed, string name) : Bullet(caliber, speed, name)
+	{
+	}
+
+	~FieryBullet()
+	{
+	}
+};
+
+class Weapon
+{
+private:
+	string _name = "Дробовик";
+	double _weight = 1.5;
+	Bullet** _bullet;
+	int _count_bullets = 30;
+	bool _is_recharge = true;
+public:
+	Weapon()
+	{
+	}
+
+	Weapon(int count_bullets)
+	{
+		_count_bullets = count_bullets;
+		_bullet = new Bullet*[_count_bullets];
+	}
+
+	Weapon(string name, double weight, int count_bullets)
+	{
+		_name = name;
+		_weight = weight;
+		_count_bullets = count_bullets;
+	}
+
+	bool isRecharge()
+	{
+		return _is_recharge;
+	}
+
+	int getCountBullets()
+	{
+		return _count_bullets;
+	}
+
+	void shot()
+	{
+		int i = 0;
+		for (int i = 0; i < _count_bullets; i++)
+		{
+			cout << "Выстрел патроном " << _bullet[i]->getName() << " с начальной скоростью " << _bullet[i]->getSpeed() << "м/с" << endl;
+		}
+		cout << "Патроны закончились" << endl;
+		_is_recharge = true;
+	}
+
+	void reload(int N, Bullet** bullet_for_shot)
+	{
+		cout << "Перезарядка" << endl;
+		_bullet = bullet_for_shot;
+		_count_bullets = N;
+		_is_recharge = false;
+	}
+
+	~Weapon()
+	{
+	}
+};
+
+class Human
+{
+private:
+	Weapon _weapon;
+	Bullet** _bullets;
+	int _count_bullets;
+	int _N = 30;
+
+	int randomIntGenerator(int A, int B)
+	{
+		return A + rand() % (B - A + 1);
+	}
+
+	double randomDoubleGenerator(int a, int b)
+	{
+		return (double)rand() / RAND_MAX * (b - a) + a;
+	}
+public:
+	Human()
+	{
+		_weapon = Weapon(_N);
+		_count_bullets = randomIntGenerator(200, 500);
+		_bullets = new Bullet * [_count_bullets];
+
+		int speed_for_bullets[3];
+		double caliber_for_bullets[3];
+
+		for (int i = 0; i < 3; i++)
+			speed_for_bullets[i] = randomIntGenerator(300, 600);
+		for (int i = 0; i < 3; i++)
+			caliber_for_bullets[i] = randomDoubleGenerator(4, 10);
+
+		for (int i = 0; i < _count_bullets; i++)
+		{
+			int type = randomIntGenerator(0, 2);
+			if (type == 0)
+			
+				_bullets[i] = new CommonBullet(caliber_for_bullets[0], speed_for_bullets[0], "Обычный");
+			else if (type == 1)
+				_bullets[i] = new PiercingBullet(caliber_for_bullets[1], speed_for_bullets[1], "Бронебойный");
+			else
+				_bullets[i] = new FieryBullet(caliber_for_bullets[2], speed_for_bullets[2], "Зажигательный");
+		}
+	}
+
+	void start()
+	{
+		cout << "Стрельба начинается" << endl;
+		while (_count_bullets != 0)
+		{
+			if (_count_bullets >= _N)
+			{
+				if (!_weapon.isRecharge())
+				{
+					_weapon.shot();
+				}
+				else
+				{
+					Bullet** bullet_for_shot = new Bullet*[_N];
+					for (int i = 0; i < _N; i++)
+					{
+						bullet_for_shot[i] = _bullets[_count_bullets - 1];
+						_count_bullets--;
+					}
+					_weapon.reload(_N, bullet_for_shot);
+				}
+			}
+			else
+			{
+				if (!_weapon.isRecharge())
+				{
+					_weapon.shot();
+				}
+				else
+				{
+					_N = _count_bullets;
+					Bullet** bullet_for_shot = new Bullet*[_N];
+					for (int i = 0; i < _N; i++)
+					{
+						bullet_for_shot[i] = _bullets[_count_bullets - 1];
+						_count_bullets--;
+					}
+					_weapon.reload(_N, bullet_for_shot);
+				}
+			}
+		}
+		cout << "Стрельба закончилась" << endl;
+	}
+
+	~Human()
+	{
+	}
+};
+
+int main()
+{
+
+	srand((unsigned int)time(0));
+
+	Human human;
+	human.start();
+	return 0;
+}
+
