@@ -1,0 +1,82 @@
+Вариант 3
+1) Создайте целочисленный массив N* N(N – считывается с консоли).
+2) Заполните массив случайными числами от 0 до 10 (включительно).
+3) Сравните сумму элементов главной и побочной диагонали.
+4) Если сумма элементов на главной диагонали больше суммы элементов на
+побочной, то умножьте все элементы массива на 2, в ином случае – найдите
+остаток от их деления на 6.
+5) Выведите все элементы массива.
+
+
+
+
+#include <iostream>
+#include <time.h>
+using namespace std;
+int main() {
+srand(time(NULL));
+cout << "Введите размерность массива" << endl;
+int N;
+int A = 0;
+int B = 10;
+
+cin >> N;
+cout << "\n";
+int array[N][N];
+int sum_head_diagonal = 0;
+int sum_side_diagonal = 0;
+int difference = 0;
+for (int i = 0;i < N;i++) {
+for (int j = 0;j < N;j++) {
+array[i][j] = rand() % (B-A+1);
+cout << array[i][j] << "\t";
+}
+cout << "\n";
+
+}
+
+
+for (int i = 0; i < N; i++)
+	sum_head_diagonal += array[i][i];
+
+      
+cout << "\n";
+cout <<"Cумма элементов  главной диагонали = " << sum_head_diagonal;
+
+for (int i = 0; i < N; i++)
+	sum_side_diagonal += array[i][N - i - 1];
+
+
+cout << "\n";
+cout <<"Cумма элементов  побочной диагонали = "<< sum_side_diagonal;
+cout << "\n";
+
+
+if(sum_head_diagonal > sum_side_diagonal) {
+cout << "Итоговый массив равен " << endl;
+		for (int i = 0; i < N; i++){
+			for (int j = 0; j < N; j++){
+				cout << array[i][j]*2 << "\t";
+			}
+			cout << "\n";
+		}	
+}
+else {
+cout << "Итоговый массив равен " << endl;
+        for (int i = 0; i < N; i++){
+			for (int j = 0; j < N; j++){
+				cout << array[i][j]%6 << "\t";
+			}
+			cout << "\n";
+        }	
+}
+return 0;
+}
+
+
+
+
+
+
+
+
